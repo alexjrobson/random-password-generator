@@ -1,42 +1,41 @@
-const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
-const NUMBERS = "0123456789";
-const SPECIAL = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+// Get DOM elements
+const lengthInput = document.getElementById('length');
+const includeUppercase = document.getElementById('includeUppercase');
+const includeLowercase = document.getElementById('includeLowercase');
+const includeNumbers = document.getElementById('includeNumbers');
+const includeSymbols = document.getElementById('includeSymbols');
+const generateBtn = document.getElementById('generateBtn');
+const passwordOutput = document.getElementById('passwordOutput');
 
-const lengthInput = document.getElementById("length");
-const uppercaseCheckbox = document.getElementById("uppercase");
-const lowercaseCheckbox = document.getElementById("lowercase");
-const numbersCheckbox = document.getElementById("numbers");
-const specialCheckbox = document.getElementById("special");
-const generateBtn = document.getElementById("generate");
-const resultDiv = document.getElementById("result");
+// Character sets
+const UPPERCASE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
+const NUMBER_CHARS = '0123456789';
+const SYMBOL_CHARS = '!@#$%^&*()_+[]{}|;:,.<>?';
 
+// Generate password function
 function generatePassword() {
-  let length = parseInt(lengthInput.value);
+  const length = parseInt(lengthInput.value);
+  let charSet = '';
 
-  if (isNaN(length) || length < 8 || length > 32) {
-    alert("Please enter a valid length between 8 and 32.");
+  if (includeUppercase.checked) charSet += UPPERCASE_CHARS;
+  if (includeLowercase.checked) charSet += LOWERCASE_CHARS;
+  if (includeNumbers.checked) charSet += NUMBER_CHARS;
+  if (includeSymbols.checked) charSet += SYMBOL_CHARS;
+
+  if (!charSet) {
+    passwordOutput.textContent = 'Please select at least one character type!';
     return;
   }
 
-  let charPool = "";
-  if (uppercaseCheckbox.checked) charPool += UPPERCASE;
-  if (lowercaseCheckbox.checked) charPool += LOWERCASE;
-  if (numbersCheckbox.checked) charPool += NUMBERS;
-  if (specialCheckbox.checked) charPool += SPECIAL;
-
-  if (charPool.length === 0) {
-    alert("Please select at least one character type.");
-    return;
-  }
-
-  let password = "";
+  let password = '';
   for (let i = 0; i < length; i++) {
-    let randomIndex = Math.floor(Math.random() * charPool.length);
-    password += charPool[randomIndex];
+    const randomIndex = Math.floor(Math.random() * charSet.length);
+    password += charSet[randomIndex];
   }
 
-  resultDiv.textContent = password;
+  passwordOutput.textContent = password;
 }
 
-generateBtn.addEventListener("click", generatePassword);
+// Event listener for button
+generateBtn.addEventListener('click', generatePassword);
